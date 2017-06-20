@@ -1,0 +1,38 @@
+\documentclass[11pt, twoside, a4paper]{article}
+
+
+\usepackage[a4paper, top=3cm, bottom=3cm, outer=2cm, inner=2.5cm]{geometry}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+%\usepackage{float} 
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{import}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+
+\usepackage{color}
+
+%\usepackage{layout}
+\usepackage{showframe}
+\usepackage{blindtext}
+
+%% multicolumn setup
+\setlength{\columnseprule}{0.5pt}
+\setlength{\columnsep}{8mm}
+\renewcommand{\columnseprulecolor}{\color[rgb]{0.8,0.8,0.8}}
+
+%% header/footer setup
+\pagestyle{fancy}
+
+\begin{document}
+	\pagenumbering{arabic}
+	\tableofcontents
+	\clearpage
+	%\layout{}
+	\begin{multicols}{2}
+		\section{2013}
+		\subsection{Mittwoch, 11. Dezember}
+		\blindtext
+	\end{multicols}
+\end{document}
