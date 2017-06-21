@@ -17,6 +17,9 @@
 \usepackage{showframe}
 \usepackage{blindtext}
 
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand*\sfdefault{phv}
+
 %% multicolumn setup
 \setlength{\columnseprule}{0.5pt}
 \setlength{\columnsep}{8mm}
@@ -24,8 +27,11 @@
 
 %% header/footer setup
 \pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
 \fancyhf{}
-\fancyhead[EL,RO]{}
+\fancyhead[EL,OR]{\rightmark}
+\fancyfoot[EL,OR]{\thepage}
 
 \begin{document}
 	\pagenumbering{arabic}
@@ -35,6 +41,8 @@
 	\begin{multicols}{2}
 		\section{2013}
 		\subsection{Mittwoch, 11. Dezember}
+		\blindtext
+		\clearpage
 		\blindtext
 	\end{multicols}
 \end{document}
