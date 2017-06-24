@@ -10,11 +10,12 @@
 \usepackage{import}
 \usepackage{multicol}
 \usepackage{fancyhdr}
+\usepackage[framemethod=tikz]{mdframed}
 
 \usepackage{color}
 
 %\usepackage{layout}
-\usepackage{showframe}
+%\usepackage{showframe}
 \usepackage{blindtext}
 
 \renewcommand{\familydefault}{\sfdefault}
@@ -27,20 +28,60 @@
 
 %% header/footer setup
 \pagestyle{fancy}
-\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
 \renewcommand{\subsectionmark}[1]{\markright{#1}}
 \fancyhf{}
-\fancyhead[EL,OR]{\rightmark}
+\fancyhead[EL,OR]{\leftmark}
+\fancyhead[ER,OL]{\rightmark}
 \fancyfoot[EL,OR]{\thepage}
+\fancypagestyle{plain}{
+	\fancyhead{}
+	\fancyfoot[EL,OR]{\thepage}}
+
+
+\title{chatPrinter}
+
+%% custom sections
+\newcommand{\newyear}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
+\newcommand{\newday}[1]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
+
+%% messages
+\definecolor{msgBoxFrame}{HTML}{AAAAAA}
+\definecolor{leftMsgWA}{HTML}{FFFEC6}
+\definecolor{rightMsgWA}{HTML}{E0FFC6}
+\newmdenv[innerlinewidth=0.1pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=leftMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{leftMessageBox}
 
 \begin{document}
 	\pagenumbering{arabic}
+	\thispagestyle{plain}
 	\tableofcontents
 	\clearpage
 	%\layout{}
 	\begin{multicols}{2}
-		\section{2013}
-		\subsection{Mittwoch, 11. Dezember}
+		\newyear{2013}
+		\newday{Mittwoch, 11. Dezember}
+		\begin{leftMessageBox}
+			\blindtext
+		\end{leftMessageBox}
+		\begin{leftMessageBox}
+			\blindtext
+		\end{leftMessageBox}
+		\begin{leftMessageBox}
+			\blindtext
+		\end{leftMessageBox}
+		\begin{leftMessageBox}
+			\blindtext
+		\end{leftMessageBox}
+		\clearpage
+		\blindtext
+		\newday{Samstag, 44. Dezember}
+		\blindtext
+		\newday{Sonntag, 45. Dezember}
+		\blindtext
+		\clearpage
+		\blindtext
+		\newyear{2014}
+		\newday{Freitag, 13. Januar}
 		\blindtext
 		\clearpage
 		\blindtext
