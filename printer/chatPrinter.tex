@@ -49,20 +49,23 @@
 \definecolor{msgBoxFrame}{HTML}{CCCCCC}
 \definecolor{leftMsgWA}{HTML}{FFFEC6}
 \definecolor{rightMsgWA}{HTML}{E0FFC6}
+\definecolor{author}{HTML}{888888}
 \newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=leftMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{leftMessageBox}
 \newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=rightMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{rightMessageBox}
-\newcommand{\leftMsg}[1]{
+\newcommand{\leftMsg}[3]{
 	\begin{minipage}{0.9\linewidth}
 		\begin{leftMessageBox}
-			#1
+			#3\vspace{1mm}\\
+			{\footnotesize \textcolor{author}{#1\hfill #2}}
 		\end{leftMessageBox}
 	\end{minipage}\vspace{10pt}
 	}
-\newcommand{\rightMsg}[1]{
+\newcommand{\rightMsg}[3]{
 	\hspace*{0.1\linewidth}
 	\begin{minipage}{0.9\linewidth}
 		\begin{rightMessageBox}
-			#1
+			#3\vspace{1mm}\\
+			{\footnotesize \textcolor{author}{#1\hfill #2}}
 		\end{rightMessageBox}
 	\end{minipage}\vspace{10pt}
 	}
@@ -80,35 +83,35 @@
 	\begin{multicols}{2}
 		\newyear{2013}
 		\newday{Mittwoch, 11. Dezember}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{ok}
-		\rightMsg{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{ok}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\newday{Donnerstag, 12. Dezember}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\newday{Samstag, 44. Dezember}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\newday{Sonntag, 45. Dezember}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\newyear{2014}
 		\newday{Freitag, 13. Januar}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
-		\leftMsg{\shortblindtext}
-		\rightMsg{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\rightMsg{Michi}{13:37}{\shortblindtext}
 	\end{multicols}
 \end{document}
