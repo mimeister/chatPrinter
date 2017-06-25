@@ -1,4 +1,4 @@
-\documentclass[11pt, twoside, a4paper]{article}
+\documentclass[10pt, twoside, a4paper]{article}
 
 
 \usepackage[a4paper, top=3cm, bottom=3cm, outer=2cm, inner=2.5cm]{geometry}
@@ -22,7 +22,7 @@
 \renewcommand*\sfdefault{phv}
 
 %% multicolumn setup
-\setlength{\columnseprule}{0.5pt}
+\setlength{\columnseprule}{0.05pt}
 \setlength{\columnsep}{8mm}
 \renewcommand{\columnseprulecolor}{\color[rgb]{0.8,0.8,0.8}}
 
@@ -42,14 +42,34 @@
 \title{chatPrinter}
 
 %% custom sections
-\newcommand{\newyear}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
-\newcommand{\newday}[1]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
+\newcommand{\newyear}[1]{\centering\section*{#1}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
+\newcommand{\newday}[1]{\centering\subsection*{#1}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
 
 %% messages
-\definecolor{msgBoxFrame}{HTML}{AAAAAA}
+\definecolor{msgBoxFrame}{HTML}{CCCCCC}
 \definecolor{leftMsgWA}{HTML}{FFFEC6}
 \definecolor{rightMsgWA}{HTML}{E0FFC6}
-\newmdenv[innerlinewidth=0.1pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=leftMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{leftMessageBox}
+\newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=leftMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{leftMessageBox}
+\newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=rightMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{rightMessageBox}
+\newcommand{\leftMsg}[1]{
+	\begin{minipage}{0.9\linewidth}
+		\begin{leftMessageBox}
+			#1
+		\end{leftMessageBox}
+	\end{minipage}\vspace{10pt}
+	}
+\newcommand{\rightMsg}[1]{
+	\hspace*{0.1\linewidth}
+	\begin{minipage}{0.9\linewidth}
+		\begin{rightMessageBox}
+			#1
+		\end{rightMessageBox}
+	\end{minipage}\vspace{10pt}
+	}
+	
+	
+	
+\newcommand{\shortblindtext}{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores}
 
 \begin{document}
 	\pagenumbering{arabic}
@@ -60,30 +80,35 @@
 	\begin{multicols}{2}
 		\newyear{2013}
 		\newday{Mittwoch, 11. Dezember}
-		\begin{leftMessageBox}
-			\blindtext
-		\end{leftMessageBox}
-		\begin{leftMessageBox}
-			\blindtext
-		\end{leftMessageBox}
-		\begin{leftMessageBox}
-			\blindtext
-		\end{leftMessageBox}
-		\begin{leftMessageBox}
-			\blindtext
-		\end{leftMessageBox}
-		\clearpage
-		\blindtext
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{ok}
+		\rightMsg{\shortblindtext}
+		\newday{Donnerstag, 12. Dezember}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
 		\newday{Samstag, 44. Dezember}
-		\blindtext
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
 		\newday{Sonntag, 45. Dezember}
-		\blindtext
-		\clearpage
-		\blindtext
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
 		\newyear{2014}
 		\newday{Freitag, 13. Januar}
-		\blindtext
-		\clearpage
-		\blindtext
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
+		\leftMsg{\shortblindtext}
+		\rightMsg{\shortblindtext}
 	\end{multicols}
 \end{document}
