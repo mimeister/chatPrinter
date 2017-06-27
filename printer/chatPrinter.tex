@@ -42,8 +42,8 @@
 \title{chatPrinter}
 
 %% custom sections
-\newcommand{\newyear}[1]{\centering\section*{#1}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
-\newcommand{\newday}[1]{\centering\subsection*{#1}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
+\newcommand{\newyear}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
+\newcommand{\newday}[1]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
 
 %% messages
 \definecolor{msgBoxFrame}{HTML}{CCCCCC}
@@ -52,23 +52,47 @@
 \definecolor{author}{HTML}{888888}
 \newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=leftMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{leftMessageBox}
 \newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=rightMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{rightMessageBox}
+\newlength{\authorSpacing}
+\setlength{\authorSpacing}{1mm}
+\newlength{\messageSpacing}
+\setlength{\messageSpacing}{5pt}
+\newlength{\msgMinWidth}
+\newlength{\msgMaxWidth}
+\newlength{\msgWidth}
+
+\newcommand{\calcMsgBoxWidth}[3]{
+	\setlength{\msgMaxWidth}{0.9\linewidth}
+	\settowidth{\msgMinWidth}{\footnotesize #1\hspace{4pt}#2}
+	\settowidth{\msgWidth}{#3}
+	\ifnum\msgWidth<\msgMinWidth
+		\setlength{\msgWidth}{\msgMinWidth}
+		\addtolength{\msgWidth}{12.1pt}
+	\else
+		\addtolength{\msgWidth}{12.1pt}
+		\ifnum\msgWidth>\msgMaxWidth
+			\setlength{\msgWidth}{\msgMaxWidth}
+		\fi
+	\fi
+}
 \newcommand{\leftMsg}[3]{
-	\begin{minipage}{0.9\linewidth}
+	\calcMsgBoxWidth{#1}{#2}{#3}
+	\begin{minipage}{\msgWidth}
 		\begin{leftMessageBox}
-			#3\vspace{1mm}\\
+			#3\vspace{\authorSpacing}\\
 			{\footnotesize \textcolor{author}{#1\hfill #2}}
 		\end{leftMessageBox}
-	\end{minipage}\vspace{10pt}
-	}
+	\end{minipage}\vspace{\messageSpacing}\\
+}
 \newcommand{\rightMsg}[3]{
-	\hspace*{0.1\linewidth}
-	\begin{minipage}{0.9\linewidth}
+	\calcMsgBoxWidth{#1}{#2}{#3}
+	\hspace*{\fill}
+	\begin{minipage}{\msgWidth}
 		\begin{rightMessageBox}
-			#3\vspace{1mm}\\
+			#3\vspace{\authorSpacing}\\
 			{\footnotesize \textcolor{author}{#1\hfill #2}}
 		\end{rightMessageBox}
-	\end{minipage}\vspace{10pt}
-	}
+	\end{minipage}\vspace{\messageSpacing}\\
+}
 	
 	
 	
@@ -91,6 +115,11 @@
 		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\leftMsg{Ramona}{13:37}{\shortblindtext}
 		\rightMsg{Michi}{13:37}{ok}
+		\rightMsg{Michi}{13:37}{bli bla blubb}
+		\rightMsg{Michi}{13:37}{bli bla blubbibidi blubb blubb}
+		\leftMsg{Ramona}{13:37}{ok}
+		\leftMsg{Ramona}{13:37}{bli bla blubb}
+		\leftMsg{Ramona}{13:37}{bli bla blubbibidi blubb blubb}
 		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\newday{Donnerstag, 12. Dezember}
 		\leftMsg{Ramona}{13:37}{\shortblindtext}
