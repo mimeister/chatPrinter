@@ -1,7 +1,7 @@
 \documentclass[10pt, twoside, a4paper]{article}
 
 
-\usepackage[a4paper, top=3cm, bottom=3cm, outer=2cm, inner=2.5cm]{geometry}
+\usepackage[a4paper, top=3cm, bottom=3cm, outer=1.5cm, inner=2cm]{geometry}
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 %\usepackage{float} 
@@ -31,8 +31,8 @@
 \renewcommand{\sectionmark}[1]{\markboth{#1}{}}
 \renewcommand{\subsectionmark}[1]{\markright{#1}}
 \fancyhf{}
-\fancyhead[EL,OR]{\leftmark}
-\fancyhead[ER,OL]{\rightmark}
+\fancyhead[EL,OR]{\rightmark}
+\fancyhead[ER,OL]{\leftmark}
 \fancyfoot[EL,OR]{\thepage}
 \fancypagestyle{plain}{
 	\fancyhead{}
@@ -68,7 +68,7 @@
 		\setlength{\msgWidth}{\msgMinWidth}
 		\addtolength{\msgWidth}{12.1pt}
 	\else
-		\addtolength{\msgWidth}{12.1pt}
+		\addtolength{\msgWidth}{12.5pt}
 		\ifnum\msgWidth>\msgMaxWidth
 			\setlength{\msgWidth}{\msgMaxWidth}
 		\fi
@@ -78,6 +78,7 @@
 	\calcMsgBoxWidth{#1}{#2}{#3}
 	\begin{minipage}{\msgWidth}
 		\begin{leftMessageBox}
+			\flushleft
 			#3\vspace{\authorSpacing}\\
 			{\footnotesize \textcolor{author}{#1\hfill #2}}
 		\end{leftMessageBox}
@@ -88,6 +89,7 @@
 	\hspace*{\fill}
 	\begin{minipage}{\msgWidth}
 		\begin{rightMessageBox}
+			\flushleft
 			#3\vspace{\authorSpacing}\\
 			{\footnotesize \textcolor{author}{#1\hfill #2}}
 		\end{rightMessageBox}
@@ -100,14 +102,14 @@
 
 \begin{document}
 	\pagenumbering{arabic}
-	\thispagestyle{plain}
-	\tableofcontents
-	\clearpage
 	%\layout{}
 	\begin{multicols}{2}
+		\thispagestyle{plain}
+		\tableofcontents
+		\clearpage		
 		\newyear{2013}
 		\newday{Mittwoch, 11. Dezember}
-		\leftMsg{Ramona}{13:37}{\shortblindtext}
+		\leftMsg{Ramona}{13:37}{\blindtext}
 		\rightMsg{Michi}{13:37}{\shortblindtext}
 		\leftMsg{Ramona}{13:37}{\shortblindtext}
 		\rightMsg{Michi}{13:37}{\shortblindtext}
