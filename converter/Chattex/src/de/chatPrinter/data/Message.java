@@ -14,6 +14,12 @@ public class Message {
 		this.timestamp = LocalDateTime.parse(dateTime, format);
 	}
 	
+	public Message(String author, String dateTime, DateTimeFormatter format, String message){
+		this.author = author;
+		this.message = message;
+		this.timestamp = LocalDateTime.parse(dateTime, format);
+	}
+	
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
