@@ -21,13 +21,17 @@ public class ChatLoader {
 		this.format = format;
 	}
 	
+	/**
+	 * Reads the given file and parses the contained messages into a list of messages
+	 * @return a list of all contained messages
+	 */
 	public List<Message> read(){
 		List<Message> chat = new ArrayList<>();
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String line;
-			String dateStr = null;
+			String dateStr = "", timestamp;
 			Matcher lineMatcher;
 			Message msg = null;
 			while ((line = br.readLine()) != null) {
@@ -44,15 +48,15 @@ public class ChatLoader {
 				if (lineMatcher.matches()) {
 					if (msg != null)		//old message is over, add it to the list
 						chat.add(msg);
-					if (dateStr == null) {
-						dateStr = lineMatcher.group("date");
+					if (format.DATE_REGEX == null) {
+						timestamp = lineMatcher.group("date");
 						if (format.DATE_PARSING_REQUIRED)
-							dateStr = format.parseDate(dateStr);
+							timestamp = format.parseDate(timestamp);
 					}
 					else {
-						dateStr = dateStr + " " + lineMatcher.group("date");
+						timestamp = dateStr + " " + lineMatcher.group("date");
 					}
-					msg = new Message(lineMatcher.group("author"), dateStr, format.DATE_FORMAT, lineMatcher.group("message"));
+					msg = new Message(lineMatcher.group("author"), timestamp, format.DATE_FORMAT, lineMatcher.group("message"));
 				}
 				else {
 					msg.append("\n" + line);
