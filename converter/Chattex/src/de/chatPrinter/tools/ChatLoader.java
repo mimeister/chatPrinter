@@ -77,6 +77,11 @@ public class ChatLoader {
 							lineMatcher.group("message"),
 							messageSide ? MessageType.RIGHT : MessageType.LEFT);
 				}
+				else if (format.otherSpecialLine(line)) {
+					if (msg != null)		//preceding message is complete, add it to the list
+						chat.add(msg);
+					msg = format.processSpecialLine(line, authors, dateStr);
+				}
 				else {
 					if (msg == null)
 						throw new ChatFileFormatException("Bad file format.", file, line, lineNumber);
