@@ -28,9 +28,8 @@ public class ChatLoader {
 	private static final String RIGHT_START_TAG = "right:";
 	private static final Pattern AUTHOR_PATTERN = Pattern.compile("\\t(?<author>[^\t]+)$");
 	
-	public ChatLoader(String file, ChatFormat format){
+	public ChatLoader(String file){
 		this.file = new File(file);
-		this.format = format;
 	}
 	
 	/**
@@ -40,7 +39,7 @@ public class ChatLoader {
 	public List<Message> read(){
 		List<Message> chat = new ArrayList<>();
 		authors = new HashMap<>();
-		boolean authorsInitialized = false; 
+		boolean metaInfoInitialized = false; 
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
@@ -50,8 +49,8 @@ public class ChatLoader {
 			lineNumber = 0;
 			while ((line = br.readLine()) != null) {
 				lineNumber++;
-				if (!authorsInitialized) { //initialize the authors
-					authorsInitialized = initializeAuthors();
+				if (!metaInfoInitialized) { //initialize the authors
+					metaInfoInitialized = initializeMetaInfo();
 					continue;
 				}
 				if (format.DATE_REGEX != null && findDate()) //try to find a date, if they're separated from the messages
@@ -85,7 +84,7 @@ public class ChatLoader {
 				else {
 					if (msg == null)
 						throw new ChatFileFormatException("Bad file format.", file, line, lineNumber);
-					msg.append("\n" + line); //TODO: throw chatfileformatexception when no msg yet created
+					msg.append("\n" + line);
 				}
 			}
 			if (msg != null)		//add last message to the list
@@ -99,7 +98,16 @@ public class ChatLoader {
 		return chat;
 	}
 	
-	private boolean initializeAuthors() {
+	private boolean initializeMetaInfo() {
+		if (lineNumber == 1) {
+			try {
+				format = ChatFormat.valueOf(line);
+			}
+			catch (IllegalArgumentException ex) {
+				throw new ChatFileFormatException("Unknown chat file format", file, line, 1);
+			}
+			return false;
+		}
 		Matcher lineMatcher = AUTHOR_PATTERN.matcher(line);		
 		if (line.equals(LEFT_START_TAG))
 			authorSide = false;

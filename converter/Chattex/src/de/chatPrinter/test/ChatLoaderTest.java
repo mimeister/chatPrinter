@@ -21,9 +21,9 @@ public class ChatLoaderTest {
 		String s = currentRelativePath.toAbsolutePath().toString();
 		System.out.println("Current relative path is: " + s);
 		s = s.replaceAll("converter/Chattex$", "");
-		ChatLoader loader = new ChatLoader(s + "example_data/wa_chat", ChatFormat.WHATSAPP);
+		ChatLoader loader = new ChatLoader(s + "example_data/wa_chat");
 		List<Message> wa = loader.read();
-		loader = new ChatLoader(s + "example_data/skype_chat", ChatFormat.SKYPE);
+		loader = new ChatLoader(s + "example_data/skype_chat");
 		List<Message> sk = loader.read();
 		System.out.println("\nWhatsApp:");
 		for (Message msg : wa) {
