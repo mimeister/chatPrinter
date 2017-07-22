@@ -1,8 +1,12 @@
 package de.chatPrinter.enums;
 
 public enum MessageType {
-	LEFT,
-	RIGHT,
-	LEFT_OTHER,
-	RIGHT_OTHER
+	LEFT("\\leftMsg{%s}{%s}{%s}"),
+	RIGHT("\\rightMsg{%s}{%s}{%s}");
+	
+	public final String latexCommand;
+	
+	MessageType(String latexCommand) {
+		this.latexCommand = latexCommand;
+	}
 }

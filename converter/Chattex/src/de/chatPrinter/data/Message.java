@@ -2,6 +2,8 @@ package de.chatPrinter.data;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+
 import de.chatPrinter.enums.*;
 
 public class Message {
@@ -54,6 +56,20 @@ public class Message {
 	
 	public void append(String msg) {
 		message += msg;
+	}
+	
+	public String toLatex() {
+		return String.format(type.latexCommand, escapeToLatex(author), timestamp.format(DateTimeFormatter.ofPattern("HH:mm")), escapeToLatex(message));
+	}
+	
+	private static String escapeToLatex(String str) {
+		str = str.replace("\\", "\\textbackslash");
+		str = str.replace("%", "\\%");
+		str = str.replace("$", "\\$");//"'~{}
+//		StringBuffer buf = new StringBuffer(str);
+//		buf.
+		//TODO implement more escaping
+		return str;
 	}
 	
 	@Override

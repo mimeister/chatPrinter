@@ -33,5 +33,10 @@ public class TestMessageClass {
 	public void testGetDate2() {
 		assertTrue("Dates not equal", msg.getDate(DateTimeFormatter.ISO_LOCAL_DATE).equals("2015-02-11"));
 	}
+	
+	@Test
+	public void testToLatex() {
+		System.out.println(msg.toLatex());
+	}
 
 }

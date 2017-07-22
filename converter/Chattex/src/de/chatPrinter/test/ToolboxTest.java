@@ -33,7 +33,7 @@ public class ToolboxTest {
 			msgL2.add(new Message(AUTHOR, timestamp+(i+15), PATTERN, String.format(MSG, 2, i), MessageType.RIGHT));
 			count = (i+1)<<1;
 		}
-		msgL3.add(new Message(AUTHOR, timestamp+"25:22", PATTERN+":ss", String.format(MSG, 3, 0), MessageType.LEFT_OTHER));	
+		msgL3.add(new Message(AUTHOR, timestamp+"25:22", PATTERN+":ss", String.format(MSG, 3, 0), MessageType.LEFT));	
 		count++;
 	}
 

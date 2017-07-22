@@ -52,7 +52,7 @@ public enum ChatFormat {
 				String timestamp = dateStr + " " + lineMatcher.group("date");
 				String rawMsg = lineMatcher.group("message");
 				String author = findAuthor(rawMsg, authors.keySet());
-				return new Message(author, timestamp, DATE_FORMAT, rawMsg.substring(author.length()), authors.get(author) ? MessageType.RIGHT_OTHER : MessageType.LEFT_OTHER);
+				return new Message(author, timestamp, DATE_FORMAT, "<" + rawMsg + ">", authors.get(author) ? MessageType.RIGHT : MessageType.LEFT);
 			}
 			else
 				throw new ChatFileFormatException("Given line is not a file-sending note");
