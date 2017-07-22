@@ -5,16 +5,28 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.*;
 
 import de.chatPrinter.data.Message;
 import de.chatPrinter.enums.ChatFormat;
+import de.chatPrinter.enums.MessageType;
+import de.chatPrinter.exception.ChatFileFormatException;
 
 public class ChatLoader {
 	
 	private File file;
 	private ChatFormat format;
+	private boolean authorSide = false; //false = left, true = right;
+	private String dateStr = null, line;
+	private Map<String, Boolean> authors;
+	private long lineNumber = 0;
+	
+	private static final String LEFT_START_TAG = "left:";
+	private static final String RIGHT_START_TAG = "right:";
+	private static final Pattern AUTHOR_PATTERN = Pattern.compile("\\t(?<author>[^\t]+)$");
 	
 	public ChatLoader(String file, ChatFormat format){
 		this.file = new File(file);
@@ -27,26 +39,26 @@ public class ChatLoader {
 	 */
 	public List<Message> read(){
 		List<Message> chat = new ArrayList<>();
+		authors = new HashMap<>();
+		boolean authorsInitialized = false; 
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
-			String line;
-			String dateStr = "", timestamp;
+			String timestamp;
 			Matcher lineMatcher;
 			Message msg = null;
+			lineNumber = 0;
 			while ((line = br.readLine()) != null) {
-				if (format.DATE_REGEX != null) {
-					lineMatcher = format.DATE_REGEX.matcher(line);
-					if (lineMatcher.matches()) {
-						dateStr = lineMatcher.group();
-						if (format.DATE_PARSING_REQUIRED)
-							dateStr = format.parseDate(dateStr);
-						continue;
-					}
+				lineNumber++;
+				if (!authorsInitialized) { //initialize the authors
+					authorsInitialized = initializeAuthors();
+					continue;
 				}
+				if (format.DATE_REGEX != null && findDate()) //try to find a date, if they're separated from the messages
+						continue;
 				lineMatcher = format.REGEX.matcher(line);
 				if (lineMatcher.matches()) {
-					if (msg != null)		//old message is over, add it to the list
+					if (msg != null)		//preceding message is complete, add it to the list
 						chat.add(msg);
 					if (format.DATE_REGEX == null) {
 						timestamp = lineMatcher.group("date");
@@ -56,21 +68,59 @@ public class ChatLoader {
 					else {
 						timestamp = dateStr + " " + lineMatcher.group("date");
 					}
-					msg = new Message(lineMatcher.group("author"), timestamp, format.DATE_FORMAT, lineMatcher.group("message"));
+					if (!authors.containsKey(lineMatcher.group("author")))
+							throw new ChatFileFormatException("Unknown author '" + lineMatcher.group("author"), file, line, lineNumber);							
+					boolean messageSide = authors.get(lineMatcher.group("author"));
+					msg = new Message(lineMatcher.group("author"),
+							timestamp,
+							format.DATE_FORMAT,
+							lineMatcher.group("message"),
+							messageSide ? MessageType.RIGHT : MessageType.LEFT);
 				}
 				else {
-					msg.append("\n" + line);
+					if (msg == null)
+						throw new ChatFileFormatException("Bad file format.", file, line, lineNumber);
+					msg.append("\n" + line); //TODO: throw chatfileformatexception when no msg yet created
 				}
 			}
 			if (msg != null)		//add last message to the list
 				chat.add(msg);
-			fr.close();			
+			br.close();
+			fr.close();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		}		
 		return chat;
+	}
+	
+	private boolean initializeAuthors() {
+		Matcher lineMatcher = AUTHOR_PATTERN.matcher(line);		
+		if (line.equals(LEFT_START_TAG))
+			authorSide = false;
+		else if (line.equals(RIGHT_START_TAG))
+			authorSide = true;
+		else if (lineMatcher.matches())
+			authors.put(lineMatcher.group("author"), authorSide);
+		else if (line.equals(""))
+			return true;
+		else
+			throw new ChatFileFormatException("Chat file header isn't formatted correctly.", file, line, lineNumber);
+		return false;
+	}
+	
+	private boolean findDate() {
+		Matcher lineMatcher = format.DATE_REGEX.matcher(line);
+		if (lineMatcher.matches()) {
+			dateStr = lineMatcher.group();
+			if (format.DATE_PARSING_REQUIRED)
+				dateStr = format.parseDate(dateStr);
+			return true;
+		}
+		else if(dateStr == null){
+			throw new ChatFileFormatException("Chat files with separated dates must start with a date.", file, line, lineNumber);
+		}
+		return false;
 	}
 
 }

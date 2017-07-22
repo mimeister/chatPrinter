@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.chatPrinter.data.Message;
+import de.chatPrinter.enums.MessageType;
 import de.chatPrinter.tools.*;
 
 import java.util.*;
@@ -28,11 +29,11 @@ public class ToolboxTest {
 		messageLists.add(msgL2);
 		messageLists.add(msgL3);
 		for (int i = 0; i < 10; i++) {
-			msgL1.add(new Message(AUTHOR, timestamp+(i+10), PATTERN, String.format(MSG, 1, i)));
-			msgL2.add(new Message(AUTHOR, timestamp+(i+15), PATTERN, String.format(MSG, 2, i)));
+			msgL1.add(new Message(AUTHOR, timestamp+(i+10), PATTERN, String.format(MSG, 1, i), MessageType.LEFT));
+			msgL2.add(new Message(AUTHOR, timestamp+(i+15), PATTERN, String.format(MSG, 2, i), MessageType.RIGHT));
 			count = (i+1)<<1;
 		}
-		msgL3.add(new Message(AUTHOR, timestamp+"25:22", PATTERN+":ss", String.format(MSG, 3, 0)));	
+		msgL3.add(new Message(AUTHOR, timestamp+"25:22", PATTERN+":ss", String.format(MSG, 3, 0), MessageType.LEFT_OTHER));	
 		count++;
 	}
 

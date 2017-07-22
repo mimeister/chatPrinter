@@ -2,22 +2,26 @@ package de.chatPrinter.data;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import de.chatPrinter.enums.*;
 
 public class Message {
 	private LocalDateTime timestamp;
 	private String author, message;
+	private MessageType type;
 	
-	public Message(String author, String dateTime, String pattern, String message){
+	public Message(String author, String dateTime, String pattern, String message, MessageType type){
 		this.author = author;
 		this.message = message;
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
 		this.timestamp = LocalDateTime.parse(dateTime, format);
+		this.type = type;
 	}
 	
-	public Message(String author, String dateTime, DateTimeFormatter format, String message){
+	public Message(String author, String dateTime, DateTimeFormatter format, String message, MessageType type){
 		this.author = author;
 		this.message = message;
 		this.timestamp = LocalDateTime.parse(dateTime, format);
+		this.type = type;
 	}
 	
 	public LocalDateTime getTimestamp() {
@@ -44,6 +48,10 @@ public class Message {
 		return message;
 	}
 	
+	public MessageType getType() {
+		return type;
+	}
+	
 	public void append(String msg) {
 		message += msg;
 	}
@@ -52,7 +60,9 @@ public class Message {
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append(timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-		buf.append(", ");
+		buf.append("| ");
+		buf.append(type.name());
+		buf.append("| ");
 		buf.append(author);
 		buf.append(": ");
 		buf.append(message);

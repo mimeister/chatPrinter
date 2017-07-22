@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.chatPrinter.data.Message;
+import de.chatPrinter.enums.MessageType;
 
 import java.time.format.DateTimeFormatter;
 
@@ -15,7 +16,7 @@ public class TestMessageClass {
 	
 	@Before
 	public void setUp(){
-		msg = new Message("Hans", "11.02.15, 22:18", "dd.MM.yy, HH:mm", "Lorem ipsum ...");
+		msg = new Message("Hans", "11.02.15, 22:18", "dd.MM.yy, HH:mm", "Lorem ipsum ...", MessageType.LEFT);
 	}
 
 	@Test
