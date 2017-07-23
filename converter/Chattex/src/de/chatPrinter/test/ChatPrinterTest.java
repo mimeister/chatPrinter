@@ -52,7 +52,7 @@ public class ChatPrinterTest {
 		String s = currentRelativePath.toAbsolutePath().toString();
 		System.out.println("\nCurrent relative path is: " + s);
 		s = s.replaceAll("converter/Chattex$", "");
-		ChatPrinter printer = new ChatPrinter(s + "example_data/wa_chat", s + "example_data/skype_chat");
+		ChatPrinter printer = new ChatPrinter(0, s + "example_data/wa_chat", s + "example_data/skype_chat");
 		System.out.println(printer.printLatex());
 	}
 

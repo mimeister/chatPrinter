@@ -1,9 +1,16 @@
 package de.chatPrinter.tools;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import de.chatPrinter.data.Message;
 import de.chatPrinter.data.Pair;
@@ -14,7 +21,22 @@ public class ChatPrinter {
 	
 	private ChatLoader[] chatLoaders = null;
 	
-	public ChatPrinter(String... files) {
+	/**
+	 * New ChatPrinter with varargs
+	 * @param x unused. Only for differentiation from constructor with array
+	 * @param files to read and print
+	 */
+	public ChatPrinter(int x, String... files) {
+		this.chatLoaders = new ChatLoader[files.length];
+		for (int i = 0; i < files.length; i++)
+			chatLoaders[i] = new ChatLoader(files[i]);
+	}	
+	
+	/**
+	 * New ChatPrinter using an array
+	 * @param files to read and print
+	 */
+	public ChatPrinter(String[] files) {
 		this.chatLoaders = new ChatLoader[files.length];
 		for (int i = 0; i < files.length; i++)
 			chatLoaders[i] = new ChatLoader(files[i]);
@@ -41,6 +63,18 @@ public class ChatPrinter {
 			buf.append(msg.toLatex() + "\n");			
 		}
 		return buf.toString();
+	}
+	
+	public void exportLatex(String filename, BooleanSupplier fileExistsAction) throws IOException {
+		String latex = printLatex();
+		File target = new File(filename);
+		if (target.exists() && fileExistsAction.getAsBoolean())
+			return;
+		FileOutputStream outStream = new FileOutputStream(filename);
+		outStream.write(latex.getBytes(Charset.forName("UTF-8")));
+		OutputStreamWriter writer = new OutputStreamWriter(outStream);
+		writer.flush();
+		outStream.close();
 	}
 	
 	public static List<Message> joinMessages(List<List<Message>> messageLists){

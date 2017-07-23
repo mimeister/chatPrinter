@@ -11,11 +11,11 @@ import de.chatPrinter.data.Message;
 import de.chatPrinter.exception.*;
 
 public enum ChatFormat {
-	WHATSAPP("^(?<date>(?:\\d\\d\\.){2}\\d\\d, \\d\\d:\\d\\d) - (?<author>[^:]+): (?<message>.*)",
+	WHATSAPP("^(?<date>(?:\\d\\d\\.){2}\\d\\d, \\d\\d:\\d\\d) - (?<author>\\S[^:]+): (?<message>.*)",
 			DateTimeFormatter.ofPattern("dd.MM.yy, HH:mm").withLocale(Locale.GERMAN),
 			null,
 			false),
-	SKYPE("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\] (?<author>[^:]+): (?<message>.*)",
+	SKYPE("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\] (?<author>\\S[^:]+): (?<message>.*)",
 			DateTimeFormatter.ofPattern("d. MMMM yyyy HH:mm:ss").withLocale(Locale.GERMAN),
 			"^ [A-Z]\\w+, (?<date>(?<day>\\d{1,2})\\. (?<month>[A-Z]\\w+) (?<year>\\d{4}))$",
 			false){
