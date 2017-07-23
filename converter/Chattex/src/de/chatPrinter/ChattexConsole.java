@@ -28,9 +28,9 @@ public class ChattexConsole {
 		}
 		System.out.println("\nEnter a target file name: ");
 		String target = userInput.next();
-		userInput.close();
 		try {
 			printer.exportLatex(target, ChattexConsole::askUserFileExists);
+			System.out.println("\nDone");
 		}
 		catch (ChatFileFormatException e) {
 			System.out.println(e.getMessage());
@@ -40,6 +40,9 @@ public class ChattexConsole {
 		}
 		catch (Exception e) {
 			e.printStackTrace(System.err);
+		}
+		finally {
+			userInput.close();
 		}
 	}
 	

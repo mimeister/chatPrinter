@@ -48,6 +48,7 @@ public class ChatLoader {
 			Message msg = null;
 			lineNumber = 0;
 			while ((line = br.readLine()) != null) {
+				//printBytes(line.getBytes());
 				lineNumber++;
 				if (!metaInfoInitialized) { //initialize the authors
 					metaInfoInitialized = initializeMetaInfo();
@@ -136,4 +137,11 @@ public class ChatLoader {
 		return false;
 	}
 
+	private static void printBytes(byte[] bs) {
+		StringBuilder sb = new StringBuilder();
+	    for (byte b : bs) {
+	        sb.append(String.format("%02X ", b));
+	    }
+	    System.out.println(sb.toString());
+	}
 }
