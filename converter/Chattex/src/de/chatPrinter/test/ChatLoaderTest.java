@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import de.chatPrinter.tools.*;
 import de.chatPrinter.data.Message;
+import de.chatPrinter.loader.*;
 
 public class ChatLoaderTest {
 
@@ -20,9 +20,9 @@ public class ChatLoaderTest {
 		String s = currentRelativePath.toAbsolutePath().toString();
 		System.out.println("Current relative path is: " + s);
 		s = s.replaceAll("converter/Chattex$", "");
-		ChatLoader loader = new ChatLoader(s + "example_data/wa_chat");
+		ChatLoader loader = new WhatsappLoader(s + "example_data/wa_chat");
 		List<Message> wa = loader.read();
-		loader = new ChatLoader(s + "example_data/skype_chat");
+		loader = new SkypeLoader(s + "example_data/skype_chat");
 		List<Message> sk = loader.read();
 		System.out.println("\nWhatsApp:");
 		for (Message msg : wa) {

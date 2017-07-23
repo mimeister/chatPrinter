@@ -59,7 +59,11 @@ public class Message {
 	}
 	
 	public String toLatex() {
-		return String.format(type.latexCommand, escapeToLatex(author), timestamp.format(DateTimeFormatter.ofPattern("HH:mm")), escapeToLatex(message));
+		if (type == MessageType.CENTER) {
+			return String.format(type.latexCommand, timestamp.format(DateTimeFormatter.ofPattern("HH:mm")), escapeToLatex(message));
+		}
+		else
+			return String.format(type.latexCommand, escapeToLatex(author), timestamp.format(DateTimeFormatter.ofPattern("HH:mm")), escapeToLatex(message));
 	}
 	
 	private static String escapeToLatex(String str) {

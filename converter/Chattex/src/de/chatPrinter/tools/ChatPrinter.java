@@ -1,7 +1,6 @@
 package de.chatPrinter.tools;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -14,6 +13,8 @@ import java.util.function.BooleanSupplier;
 
 import de.chatPrinter.data.Message;
 import de.chatPrinter.data.Pair;
+import de.chatPrinter.enums.ChatFormat;
+import de.chatPrinter.loader.ChatLoader;
 
 
 
@@ -28,8 +29,13 @@ public class ChatPrinter {
 	 */
 	public ChatPrinter(int x, String... files) {
 		this.chatLoaders = new ChatLoader[files.length];
-		for (int i = 0; i < files.length; i++)
-			chatLoaders[i] = new ChatLoader(files[i]);
+		try {
+			for (int i = 0; i < files.length; i++)
+				chatLoaders[i] = ChatFormat.findLoader(files[i]);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}	
 	
 	/**
@@ -38,17 +44,23 @@ public class ChatPrinter {
 	 */
 	public ChatPrinter(String[] files) {
 		this.chatLoaders = new ChatLoader[files.length];
+		try {
 		for (int i = 0; i < files.length; i++)
-			chatLoaders[i] = new ChatLoader(files[i]);
+			chatLoaders[i] = ChatFormat.findLoader(files[i]);
+		}
+		catch (Exception e) {
+			e.printStackTrace();			
+		}
 	}
 	
 	public String printLatex() {
 		List<List<Message>> chats = new ArrayList<>();
 		for (ChatLoader loader : chatLoaders)
 			chats.add(loader.read());
+		System.out.println("\nJoining...");
 		List<Message> joined = joinMessages(chats);
 		StringBuffer buf = new StringBuffer();
-		LocalDate lastDate = null, currentDate = null;
+		LocalDate lastDate = null, currentDate = null;//TODO eine fortschrittsanzeige wäre cool...
 		for (Message msg : joined) {
 			if (lastDate == null)
 				lastDate = msg.getTimestamp().toLocalDate();
