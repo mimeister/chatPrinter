@@ -2,10 +2,13 @@
 \documentclass[10pt, twoside, a4paper]{article}
 
 
-\usepackage[a4paper, top=3cm, bottom=3cm, outer=1.5cm, inner=2cm]{geometry}
+\usepackage[a4paper, top=2.25cm, bottom=2cm, outer=1.25cm, inner=1.75cm]{geometry}
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 %\usepackage{float} 
+
+\usepackage{fontspec}
+\setmainfont[Scale=0.9]{DejaVu Sans}
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{import}
@@ -19,8 +22,8 @@
 %\usepackage{showframe}
 \usepackage{blindtext}
 
-\renewcommand{\familydefault}{\sfdefault}
-\renewcommand*\sfdefault{phv}
+%\renewcommand{\familydefault}{\sfdefault}
+%\renewcommand*\sfdefault{phv}
 
 %% multicolumn setup
 \setlength{\columnseprule}{0.05pt}
@@ -42,27 +45,60 @@
 
 \title{chatPrinter}
 
-%% custom sections
-\newcommand{\newyear}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
-\newcommand{\newday}[1]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
+
+
+%% section setup
+\definecolor{captionBoxFrame}{HTML}{CCCCCC}
+\definecolor{captionBG}{HTML}{E2F5FF}
+\newmdenv[innerlinewidth=0pt, roundcorner=5pt, linecolor=captionBoxFrame, backgroundcolor=captionBG, innerleftmargin=4pt, innerrightmargin=4pt, innertopmargin=4pt, innerbottommargin=4pt]{captionBox}
+\makeatletter
+\newlength{\captionWidth}
+\newcommand{\calcCaptionBoxWidth}[1]{
+	\settowidth{\captionWidth}{#1}
+	\addtolength{\captionWidth}{8pt}
+	\ifnum\captionWidth>\linewidth
+		\setlength{\captionWidth}{\linewidth}
+	\fi
+}
+\newcommand{\makeCaptionBox}[1]{
+	\calcCaptionBoxWidth{#1}
+	\begin{minipage}{\captionWidth}
+		\begin{captionBox}
+			#1
+		\end{captionBox}
+	\end{minipage}
+}
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+	{-3.5ex \@plus -1ex \@minus -.2ex}%
+	{1.5ex \@plus.2ex}%
+	{\centering\normalfont\bfseries\Large}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+	{-3.25ex\@plus -1ex \@minus -.2ex}%
+	{1.5ex \@plus .2ex}%
+	{\centering\normalfont}}
+\makeatother
+\newcommand{\newyear}[1]{\section*{\makeCaptionBox{~#1~}}\addcontentsline{toc}{section}{#1}\markboth{#1}{}}
+\newcommand{\newday}[1]{\subsection*{\makeCaptionBox{#1}}\addcontentsline{toc}{subsection}{#1}\markright{#1}}
 
 %% messages
 \definecolor{msgBoxFrame}{HTML}{CCCCCC}
 \definecolor{leftMsgWA}{HTML}{FFFEC6}
 \definecolor{rightMsgWA}{HTML}{E0FFC6}
+\definecolor{centerMsgWA}{HTML}{E2F5FF}
 \definecolor{author}{HTML}{888888}
 \newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=leftMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{leftMessageBox}
 \newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=rightMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{rightMessageBox}
+\newmdenv[innerlinewidth=0.05pt, roundcorner=5pt, linecolor=msgBoxFrame, backgroundcolor=centerMsgWA, innerleftmargin=6pt, innerrightmargin=6pt, innertopmargin=6pt, innerbottommargin=6pt, rightmargin=30pt]{centerMessageBox}
 \newlength{\authorSpacing}
-\setlength{\authorSpacing}{1mm}
+\setlength{\authorSpacing}{0pt}
 \newlength{\messageSpacing}
-\setlength{\messageSpacing}{5pt}
+\setlength{\messageSpacing}{2.5pt}
 \newlength{\msgMinWidth}
 \newlength{\msgMaxWidth}
 \newlength{\msgWidth}
 
 \newcommand{\calcMsgBoxWidth}[3]{
-	\setlength{\msgMaxWidth}{0.9\linewidth}
+	\setlength{\msgMaxWidth}{0.925\linewidth}
 	\settowidth{\msgMinWidth}{\footnotesize #1\hspace{4pt}#2}
 	\settowidth{\msgWidth}{#3}
 	\ifnum\msgWidth<\msgMinWidth
@@ -73,6 +109,20 @@
 		\ifnum\msgWidth>\msgMaxWidth
 			\setlength{\msgWidth}{\msgMaxWidth}
 		\fi
+	\fi
+}
+\newcommand{\calcCenterMsgBoxWidth}[2]{
+	\setlength{\msgMaxWidth}{\linewidth}
+	\settowidth{\msgMinWidth}{\footnotesize #1}
+	\settowidth{\msgWidth}{#2}
+	\ifnum\msgWidth<\msgMinWidth
+	\setlength{\msgWidth}{\msgMinWidth}
+	\addtolength{\msgWidth}{12.1pt}
+	\else
+	\addtolength{\msgWidth}{12.5pt}
+	\ifnum\msgWidth>\msgMaxWidth
+	\setlength{\msgWidth}{\msgMaxWidth}
+	\fi
 	\fi
 }
 \newcommand{\leftMsg}[3]{
@@ -96,6 +146,18 @@
 		\end{rightMessageBox}
 	\end{minipage}\vspace{\messageSpacing}\\
 }
+\newcommand{\centerMsg}[2]{
+	\calcCenterMsgBoxWidth{#1}{#2}
+	\hspace*{\fill}	
+	\begin{minipage}{\msgWidth}
+		\begin{centerMessageBox}
+			\centering
+			#2\vspace{\authorSpacing}\\
+			{\footnotesize \hfill\textcolor{author}{#1}\hfill}
+		\end{centerMessageBox}
+	\end{minipage}\vspace{\messageSpacing}
+	\hspace*{\fill}\\
+}
 	
 	
 	
@@ -109,5 +171,6 @@
 		\tableofcontents
 		\clearpage		
 		\include{sample_data}
+		%\include{blindtext_messages}
 	\end{multicols}
 \end{document}
