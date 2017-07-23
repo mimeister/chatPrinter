@@ -9,9 +9,11 @@ import de.chatPrinter.data.Message;
 import de.chatPrinter.enums.MessageType;
 import de.chatPrinter.tools.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
-public class ToolboxTest {
+public class ChatPrinterTest {
 	private final String AUTHOR = "author";
 	private final String PATTERN = "dd.MM.yyyy, HH:mm";
 	private final String MSG = "Messenger %d, message %d";
@@ -39,9 +41,19 @@ public class ToolboxTest {
 
 	@Test
 	public void testJoinMessages() {
-		List<Message> joined = Toolbox.joinMessages(messageLists);
+		List<Message> joined = ChatPrinter.joinMessages(messageLists);
 		joined.forEach(msg -> System.out.println(msg.toString()));
 		assertEquals("Message count incorrect", count, joined.size());
+	}
+	
+	@Test
+	public void testPrintLatex() {
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		System.out.println("\nCurrent relative path is: " + s);
+		s = s.replaceAll("converter/Chattex$", "");
+		ChatPrinter printer = new ChatPrinter(s + "example_data/wa_chat", s + "example_data/skype_chat");
+		System.out.println(printer.printLatex());
 	}
 
 }

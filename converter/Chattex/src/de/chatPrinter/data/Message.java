@@ -2,7 +2,7 @@ package de.chatPrinter.data;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
+import java.util.Locale;
 
 import de.chatPrinter.enums.*;
 
@@ -35,11 +35,11 @@ public class Message {
 	}
 	
 	public String getDate(DateTimeFormatter format){
-		return timestamp.toLocalDate().format(format);
+		return timestamp.toLocalDate().format(format.withLocale(Locale.GERMAN));
 	}
 	
 	public String getDate(String pattern){
-		return timestamp.toLocalDate().format(DateTimeFormatter.ofPattern(pattern));
+		return timestamp.toLocalDate().format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.GERMAN));
 	}
 	
 	public String getAuthor() {
@@ -63,9 +63,20 @@ public class Message {
 	}
 	
 	private static String escapeToLatex(String str) {
-		str = str.replace("\\", "\\textbackslash");
+		str = str.replace("\\", "\\textbackslash ");
 		str = str.replace("%", "\\%");
-		str = str.replace("$", "\\$");//"'~{}
+		str = str.replace("$", "\\$");//"
+		str = str.replace("~", "\\textasciitilde ");
+		str = str.replace("{", "\\{");
+		str = str.replace("}", "\\}");
+		str = str.replace("&", "\\&");
+		str = str.replace("#", "\\#");
+		str = str.replace("_", "\\_");
+		str = str.replace("^", "\\textasciicircum ");
+		str = str.replace("<", "\\textless ");
+		str = str.replace(">", "\\textgreater ");
+		str = str.replace("\n", "\\\\\n");
+		
 //		StringBuffer buf = new StringBuffer(str);
 //		buf.
 		//TODO implement more escaping

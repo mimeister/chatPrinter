@@ -1,6 +1,7 @@
 package de.chatPrinter.enums;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -11,33 +12,14 @@ import de.chatPrinter.exception.*;
 
 public enum ChatFormat {
 	WHATSAPP("^(?<date>(?:\\d\\d\\.){2}\\d\\d, \\d\\d:\\d\\d) - (?<author>[^:]+): (?<message>.*)",
-			DateTimeFormatter.ofPattern("dd.MM.yy, HH:mm"),
+			DateTimeFormatter.ofPattern("dd.MM.yy, HH:mm").withLocale(Locale.GERMAN),
 			null,
 			false),
 	SKYPE("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\] (?<author>[^:]+): (?<message>.*)",
-			DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"),
-			"^ [A-Z]\\w+, (?<day>\\d{1,2})\\. (?<month>[A-Z]\\w+) (?<year>\\d{4})$",
-			true){
+			DateTimeFormatter.ofPattern("d. MMMM yyyy HH:mm:ss").withLocale(Locale.GERMAN),
+			"^ [A-Z]\\w+, (?<date>(?<day>\\d{1,2})\\. (?<month>[A-Z]\\w+) (?<year>\\d{4}))$",
+			false){
 		private final Pattern fileSendingNote = Pattern.compile("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\]  (?<message>\\S.*)");
-		
-		@Override
-		public String parseDate(String rawDate) {
-			Matcher match = DATE_REGEX.matcher(rawDate);
-			StringBuffer parsedDate = new StringBuffer("");
-			if (match.matches()) {
-				String day = match.group("day");
-				String month = Month.monthOfYearFromName(match.group("month"));
-				String year = match.group("year");
-				if (day.length() == 1)
-					parsedDate.append("0");
-				parsedDate.append(day);
-				parsedDate.append(".");
-				parsedDate.append(month);
-				parsedDate.append(".");
-				parsedDate.append(year);
-			}
-			return parsedDate.toString();
-		}
 		
 		@Override
 		public boolean otherSpecialLine(String line) {

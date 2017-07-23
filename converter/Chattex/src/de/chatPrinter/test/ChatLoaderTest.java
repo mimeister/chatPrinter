@@ -1,6 +1,6 @@
 package de.chatPrinter.test;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import de.chatPrinter.tools.*;
 import de.chatPrinter.data.Message;
-import de.chatPrinter.enums.*;
 
 public class ChatLoaderTest {
 

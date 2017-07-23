@@ -125,7 +125,7 @@ public class ChatLoader {
 	private boolean findDate() {
 		Matcher lineMatcher = format.DATE_REGEX.matcher(line);
 		if (lineMatcher.matches()) {
-			dateStr = lineMatcher.group();
+			dateStr = lineMatcher.group("date");
 			if (format.DATE_PARSING_REQUIRED)
 				dateStr = format.parseDate(dateStr);
 			return true;

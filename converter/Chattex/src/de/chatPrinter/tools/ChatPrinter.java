@@ -1,5 +1,6 @@
 package de.chatPrinter.tools;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +10,38 @@ import de.chatPrinter.data.Pair;
 
 
 
-public class Toolbox {
+public class ChatPrinter {
+	
+	private ChatLoader[] chatLoaders = null;
+	
+	public ChatPrinter(String... files) {
+		this.chatLoaders = new ChatLoader[files.length];
+		for (int i = 0; i < files.length; i++)
+			chatLoaders[i] = new ChatLoader(files[i]);
+	}
+	
+	public String printLatex() {
+		List<List<Message>> chats = new ArrayList<>();
+		for (ChatLoader loader : chatLoaders)
+			chats.add(loader.read());
+		List<Message> joined = joinMessages(chats);
+		StringBuffer buf = new StringBuffer();
+		LocalDate lastDate = null, currentDate = null;
+		for (Message msg : joined) {
+			if (lastDate == null)
+				lastDate = msg.getTimestamp().toLocalDate();
+			else
+				lastDate = currentDate;
+			currentDate = msg.getTimestamp().toLocalDate();
+			if (buf.length() == 0 || currentDate.isAfter(lastDate)) {
+				if (buf.length() == 0 || currentDate.getYear() > lastDate.getYear())
+					buf.append("\\newyear{" + currentDate.getYear() + "}\n");
+				buf.append("\\newday{" + msg.getDate("eeee, d. MMMM") + "}\n");
+			}
+			buf.append(msg.toLatex() + "\n");			
+		}
+		return buf.toString();
+	}
 	
 	public static List<Message> joinMessages(List<List<Message>> messageLists){
 		List<Message> joined = new ArrayList<>();
