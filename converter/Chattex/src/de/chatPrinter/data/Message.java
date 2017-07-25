@@ -11,6 +11,13 @@ public class Message {
 	private String author, message;
 	private MessageType type;
 	
+	private Message(String author, LocalDateTime timestamp, MessageType type) {
+		this.timestamp = timestamp;
+		this.author = author;
+		this.type = type;
+		message = "";
+	}
+	
 	public Message(String author, String dateTime, String pattern, String message, MessageType type){
 		this.author = author;
 		this.message = message;
@@ -24,6 +31,10 @@ public class Message {
 		this.message = message;
 		this.timestamp = LocalDateTime.parse(dateTime, format);
 		this.type = type;
+	}
+	
+	public Message createEmptyClone() {
+		return new Message(author, timestamp, type);
 	}
 	
 	public LocalDateTime getTimestamp() {
@@ -67,6 +78,7 @@ public class Message {
 	}
 	
 	private static String escapeToLatex(String str) {
+		str = str.replaceAll("\\S{40}", "$0 "); //break overlong words
 		str = str.replace("\\", "\\textbackslash ");
 		str = str.replace("%", "\\%");
 		str = str.replace("$", "\\$");//"
@@ -80,7 +92,10 @@ public class Message {
 		str = str.replace("<", "\\textless ");
 		str = str.replace(">", "\\textgreater ");
 		str = str.replace("\n", "\\\\\n");
-		
+		str = str.replaceAll("(?<=\\s|^)\\\"(?=\\S)", "”");
+		str = str.replace("\"", "“");
+		str = str.replaceAll("(?<=\\s|^)'(?=\\S)", "’");
+		str = str.replace("'", "‘");
 //		StringBuffer buf = new StringBuffer(str);
 //		buf.
 		//TODO implement more escaping

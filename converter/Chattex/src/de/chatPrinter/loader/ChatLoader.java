@@ -22,10 +22,13 @@ public abstract class ChatLoader {
 	String dateStr = null, line;
 	Map<String, Boolean> authors;
 	long lineNumber = 0;
+	public boolean debug = false;
 	
 	static final String LEFT_START_TAG = "left:";
 	static final String RIGHT_START_TAG = "right:";
 	static final Pattern AUTHOR_PATTERN = Pattern.compile("\\t(?<author>[^\t]+)$");
+	static final int MAX_LINES_PER_MESSAGE = 10;
+	static final int MAX_MESSAGE_LENGTH = 500;
 	
 	public ChatLoader(String file){
 		this.file = new File(file);

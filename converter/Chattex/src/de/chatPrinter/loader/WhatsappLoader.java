@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import de.chatPrinter.data.Message;
 import de.chatPrinter.enums.MessageType;
 import de.chatPrinter.exception.ChatFileFormatException;
+import com.github.binarywang.java.emoji.*;
 
 public class WhatsappLoader extends ChatLoader {
 	
@@ -26,6 +27,7 @@ public class WhatsappLoader extends ChatLoader {
 	
 	@Override
 	public List<Message> read(){
+		
 		List<Message> chat = new ArrayList<>();
 		authors = new HashMap<>();
 		boolean metaInfoInitialized = false; 
@@ -37,10 +39,14 @@ public class WhatsappLoader extends ChatLoader {
 			Matcher lineMatcher;
 			Message msg = null;
 			lineNumber = 0;
+			int appendCounter = 0;
+			EmojiConverter ec = EmojiConverter.getInstance();
 			while ((line = br.readLine()) != null) {
 				lineNumber++;
-				//printBytes(line.getBytes());
-				//System.out.println("Processing line " + lineNumber + ": " + line);
+				if (debug) {
+					printBytes(line.getBytes());
+					System.out.println("Processing line " + lineNumber + ": " + line);
+				}
 				if (!metaInfoInitialized) { //initialize the authors
 					metaInfoInitialized = initializeMetaInfo();
 					continue;
@@ -56,8 +62,9 @@ public class WhatsappLoader extends ChatLoader {
 					msg = new Message(lineMatcher.group("author"),
 							timestamp,
 							DATE_FORMAT,
-							lineMatcher.group("message"),
+							ec.toUnicode(lineMatcher.group("message")),
 							messageSide ? MessageType.RIGHT : MessageType.LEFT);
+					appendCounter = 0;
 				}
 				else if (line.trim().equals("")) { //skip empty lines; they cause latex errors
 					continue;
@@ -65,7 +72,12 @@ public class WhatsappLoader extends ChatLoader {
 				else {
 					if (msg == null)
 						throw new ChatFileFormatException("Bad file format.", file, line, lineNumber);
-					msg.append("\n" + line);
+					msg.append("\n" + ec.toUnicode(line));
+					appendCounter++;
+					if (appendCounter >= MAX_LINES_PER_MESSAGE || msg.getMessage().length() >= MAX_MESSAGE_LENGTH) {
+						chat.add(msg);
+						msg = msg.createEmptyClone();
+					}
 				}
 			}
 			if (msg != null)		//add last message to the list

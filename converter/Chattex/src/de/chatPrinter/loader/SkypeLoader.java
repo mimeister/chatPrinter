@@ -41,10 +41,13 @@ public class SkypeLoader extends ChatLoader {
 			Matcher lineMatcher, dateMatcher;
 			Message msg = null;
 			lineNumber = 0;
+			int appendCounter = 0;
 			while ((line = br.readLine()) != null) {
 				lineNumber++;
-				//printBytes(line.getBytes());
-				//System.out.println("Processing line " + lineNumber + ": " + line);
+				if (debug) {
+					System.out.println("Processing line " + lineNumber + ": " + line);
+					printBytes(line.getBytes());
+				}
 				if (!metaInfoInitialized) { //initialize the authors
 					metaInfoInitialized = initializeMetaInfo();
 					continue;
@@ -52,6 +55,7 @@ public class SkypeLoader extends ChatLoader {
 				dateMatcher = DATE_REGEX.matcher(line);
 				if (dateMatcher.matches()) { //try to find a date
 					dateStr = dateMatcher.group("date");
+					appendCounter = 0;
 					continue;
 				}
 				if(dateStr == null){
@@ -70,6 +74,7 @@ public class SkypeLoader extends ChatLoader {
 							DATE_FORMAT,
 							lineMatcher.group("message"),
 							messageSide ? MessageType.RIGHT : MessageType.LEFT);
+					appendCounter = 0;
 					continue;
 				}
 				lineMatcher = OTHER_REGEX.matcher(line);
@@ -82,6 +87,7 @@ public class SkypeLoader extends ChatLoader {
 							DATE_FORMAT,
 							"<" + lineMatcher.group("message") + ">",
 							MessageType.CENTER);
+					appendCounter = 0;
 					continue;
 				}
 				if (line.trim().equals("")) { //skip empty lines; they cause latex errors
@@ -91,6 +97,12 @@ public class SkypeLoader extends ChatLoader {
 					if (msg == null)
 						throw new ChatFileFormatException("Bad file format.", file, line, lineNumber);
 					msg.append("\n" + line);
+					appendCounter++;
+					if (appendCounter >= MAX_LINES_PER_MESSAGE || msg.getMessage().length() >= MAX_MESSAGE_LENGTH) {
+						chat.add(msg);
+						msg = msg.createEmptyClone();
+						appendCounter = 0;
+					}
 				}
 			}
 			if (msg != null)		//add last message to the list
