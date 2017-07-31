@@ -2,11 +2,12 @@
 \documentclass[10pt, twoside, a4paper]{article}
 
 
-\usepackage[a4paper, top=2.25cm, bottom=2cm, outer=1.25cm, inner=1.75cm]{geometry}
+\usepackage[a4paper, top=2.25cm, bottom=2cm, outer=1.25cm, inner=2cm]{geometry}
 \usepackage[ngerman]{babel}
-\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc}
 %\usepackage{float} 
 
+%XeLaTeX needed!
 \usepackage{fontspec}
 \setmainfont[Scale=0.9]{DejaVu Sans}
 
@@ -51,7 +52,6 @@
 \definecolor{captionBoxFrame}{HTML}{CCCCCC}
 \definecolor{captionBG}{HTML}{E2F5FF}
 \newmdenv[innerlinewidth=0pt, roundcorner=5pt, linecolor=captionBoxFrame, backgroundcolor=captionBG, innerleftmargin=4pt, innerrightmargin=4pt, innertopmargin=4pt, innerbottommargin=4pt]{captionBox}
-\makeatletter
 \newlength{\captionWidth}
 \newcommand{\calcCaptionBoxWidth}[1]{
 	\settowidth{\captionWidth}{#1}
@@ -68,6 +68,7 @@
 		\end{captionBox}
 	\end{minipage}
 }
+\makeatletter
 \renewcommand\section{\@startsection {section}{1}{\z@}%
 	{-3.5ex \@plus -1ex \@minus -.2ex}%
 	{1.5ex \@plus.2ex}%
@@ -169,8 +170,8 @@
 	\begin{multicols}{2}
 		\thispagestyle{plain}
 		\tableofcontents
-		\clearpage		
+		\clearpage	
+		%include your chat messages here	
 		\include{sample_data}
-		%\include{blindtext_messages}
 	\end{multicols}
 \end{document}

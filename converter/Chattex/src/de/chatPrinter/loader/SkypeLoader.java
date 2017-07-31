@@ -22,7 +22,8 @@ public class SkypeLoader extends ChatLoader {
 	private static final Pattern MESSAGE_REGEX = Pattern.compile("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\] (?<author>\\S[^:]+): (?<message>.*)");
 	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("d. MMMM yyyy HH:mm:ss").withLocale(Locale.GERMAN);
 	private static final Pattern DATE_REGEX = Pattern.compile("^ [A-Z]\\w+, (?<date>(?<day>\\d{1,2})\\. (?<month>[A-Z]\\w+) (?<year>\\d{4}))$");
-	private static final Pattern OTHER_REGEX = Pattern.compile("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\]  (?<message>\\S.*)");
+	private static final Pattern FILE_AND_CALL_REGEX = Pattern.compile("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\]  (?<message>\\S.*)");
+	private static final Pattern ME_REGEX = Pattern.compile("^\\[(?<date>(?:\\d\\d:){2}\\d\\d)\\] (?<message>\\* \\S.*)");
 
 	
 	public SkypeLoader(String file) {
@@ -77,7 +78,7 @@ public class SkypeLoader extends ChatLoader {
 					appendCounter = 0;
 					continue;
 				}
-				lineMatcher = OTHER_REGEX.matcher(line);
+				lineMatcher = FILE_AND_CALL_REGEX.matcher(line);
 				if (lineMatcher.matches()) { //process special message (file/call)
 					if (msg != null)		//preceding message is complete, add it to the list
 						chat.add(msg);
@@ -85,10 +86,23 @@ public class SkypeLoader extends ChatLoader {
 					msg = new Message("",
 							timestamp,
 							DATE_FORMAT,
-							"<" + lineMatcher.group("message") + ">",
+							lineMatcher.group("message"),
 							MessageType.CENTER);
 					appendCounter = 0;
 					continue;
+				}
+				lineMatcher = ME_REGEX.matcher(line);
+				if (lineMatcher.matches()) { //process special message (me-message like "* Sam is a clown")
+					if (msg != null)		//preceding message is complete, add it to the list
+						chat.add(msg);
+					timestamp = dateStr + " " + lineMatcher.group("date");
+					msg = new Message("",
+							timestamp,
+							DATE_FORMAT,
+							lineMatcher.group("message"),
+							MessageType.CENTER);
+					appendCounter = 0;
+					continue;					
 				}
 				if (line.trim().equals("")) { //skip empty lines; they cause latex errors
 					continue;

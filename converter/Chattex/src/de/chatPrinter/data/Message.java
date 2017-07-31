@@ -91,6 +91,7 @@ public class Message {
 		str = str.replace("^", "\\textasciicircum ");
 		str = str.replace("<", "\\textless ");
 		str = str.replace(">", "\\textgreater ");
+		if (str.startsWith("\n")) str = str.substring(1);
 		str = str.replace("\n", "\\\\\n");
 		str = str.replaceAll("(?<=\\s|^)\\\"(?=\\S)", "”");
 		str = str.replace("\"", "“");

@@ -62,6 +62,8 @@ public class ChatPrinter {
 		StringBuffer buf = new StringBuffer();
 		LocalDate lastDate = null, currentDate = null;//TODO eine fortschrittsanzeige wäre cool...
 		for (Message msg : joined) {
+			if (msg.getMessage().length() == 0)
+				continue;
 			if (lastDate == null)
 				lastDate = msg.getTimestamp().toLocalDate();
 			else
